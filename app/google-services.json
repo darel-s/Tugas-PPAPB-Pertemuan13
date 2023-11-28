@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "125224325754",
+    "project_id": "tugaspertemuan13-bc743",
+    "storage_bucket": "tugaspertemuan13-bc743.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125224325754:android:b392b0e8d0a5f5a63961c3",
+        "android_client_info": {
+          "package_name": "com.example.tugaspertemuan12"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG-nGXv1oKRJ57Bw1Gfe5w9h07-RcyKUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,40 +4,43 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.tugaspertemuan12.databinding.ActivityUpdatePlayerBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 class UpdatePlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdatePlayerBinding
-    private lateinit var db: NoteDatabaseHelper
-    private var playerId: Int = -1
+    private val db = FirebaseFirestore.getInstance()
+    private var playerId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUpdatePlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db = NoteDatabaseHelper(this)
-
-        playerId = intent.getIntExtra("note_id", -1)
-        if (playerId == -1){
+        playerId = intent.getStringExtra("player_id") ?: ""
+        if (playerId == ""){
             finish()
             return
         }
 
-        val note = db.getNoteByID(playerId)
-        binding.UpdateplayerNameEditText.setText(note.playerName)
-        binding.UpdateplayeClubEditText.setText(note.clubName)
+        db.collection("players").document(playerId).get()
+            .addOnSuccessListener { document ->
+                val player = document.toObject(Player::class.java)
+                binding.UpdateplayerNameEditText.setText(player?.name)
+                binding.UpdateplayeClubEditText.setText(player?.club)
+            }
 
         binding.updateButton.setOnClickListener{
-            val newTitle = binding.UpdateplayerNameEditText.text.toString()
-            val newContent = binding.UpdateplayeClubEditText.text.toString()
-            val updatedNote = Note(playerId, newTitle, newContent)
-            val success = db.updateNote(updatedNote)
-            if (success) {
-                finish()
-                Toast.makeText(this, "Pemain Diperbarui", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Gagal memperbarui pemain", Toast.LENGTH_SHORT).show()
-            }
+            val newName = binding.UpdateplayerNameEditText.text.toString()
+            val newClub = binding.UpdateplayeClubEditText.text.toString()
+            val playerData = Player(playerId, newName, newClub)
+            db.collection("players").document(playerId).set(playerData)
+                .addOnSuccessListener {
+                    finish()
+                    Toast.makeText(this, "Pemain Diperbarui", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Gagal memperbarui pemain", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 }
