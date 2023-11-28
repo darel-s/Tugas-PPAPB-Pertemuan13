@@ -34,7 +34,6 @@ class AddPlayerActivity : AppCompatActivity() {
                     }
                     .addOnFailureListener {
                         Toast.makeText(this, "Gagal menyimpan pemain", Toast.LENGTH_SHORT).show()
-//                        Buatkan log untuk mengetahui dimana letak errornya
                         Log.d("AddPlayerActivity", "Error: ${it.message}")
                     }
             } else {
